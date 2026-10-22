@@ -87,34 +87,6 @@
     padding: 30px 20px 50px;
     position: relative;
   }
-  /* 音乐按钮 */
-  .music-btn{
-    position:fixed;
-    top:24px;
-    right:24px;
-    z-index:10;
-    width:52px;
-    height:52px;
-    border-radius:50%;
-    border:none;
-    background:rgba(255,255,255,0.65);
-    backdrop-filter:blur(8px);
-    box-shadow:0 4px 14px rgba(255,140,180,0.3);
-    font-size:24px;
-    cursor:pointer;
-    transition:0.3s;
-  }
-  .music-btn:hover{
-    transform:scale(1.1);
-    background:#fff;
-  }
-  .music-btn.playing{
-    animation:musicRotate 3s linear infinite;
-  }
-  @keyframes musicRotate{
-    from{transform:rotate(0deg);}
-    to{transform:rotate(360deg);}
-  }
 
   .glow-title {
     font-size: 56px;
@@ -128,7 +100,6 @@
     animation: titleShine 4.5s linear infinite;
     filter: drop-shadow(0 0 20px rgba(255, 110, 170, 0.4));
     transition: opacity 0.4s ease;
-    cursor:pointer;
   }
 
   @keyframes titleShine {
@@ -200,7 +171,6 @@
     background-image: linear-gradient(#fff, #fff), linear-gradient(135deg, #ffb8d1, #ffdf9e, #9de0ff, #c7b0ff);
     background-origin: border-box;
     background-clip: padding-box, border-box;
-    cursor: pointer;
     transition: 0.3s ease;
     box-shadow: 0 12px 30px rgba(255, 130, 180, 0.25);
   }
@@ -267,60 +237,6 @@
     transform: translateY(-5px) scale(1.07);
   }
 
-  /* 大图预览弹窗 */
-  .lightbox {
-    position: fixed;
-    inset: 0;
-    background: rgba(35, 15, 55, 0.82);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-    padding: 22px;
-    backdrop-filter: blur(9px);
-  }
-  .lightbox.active { display: flex; }
-  .lightbox-box{
-    position:relative;
-  }
-  .lightbox img {
-    max-width: 92%;
-    max-height: 92vh;
-    border-radius: 18px;
-    border: 4px solid #fff;
-    box-shadow: 0 0 65px rgba(255, 200, 240, 0.82);
-    animation: popIn 0.48s cubic-bezier(0.2, 0.9, 0.3, 1.2);
-  }
-  /* 预览左右切换按钮 */
-  .prev-btn,.next-btn{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    border:none;
-    background:rgba(255,255,255,0.65);
-    font-size:22px;
-    cursor:pointer;
-  }
-  .prev-btn{left:-60px;}
-  .next-btn{right:-60px;}
-  .close-preview{
-    position:absolute;
-    top:-40px;
-    right:0;
-    background:transparent;
-    border:none;
-    color:#fff;
-    font-size:30px;
-    cursor:pointer;
-  }
-  @keyframes popIn {
-    from { transform: scale(0.62); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-
   .burst {
     position: fixed;
     pointer-events: none;
@@ -337,28 +253,20 @@
     .glow-title { font-size: 38px; letter-spacing: 4px; }
     .hero-sub { font-size: 17px; }
     .photo-item img { height:240px; }
-    .music-btn{width:46px;height:46px;font-size:20px;}
-    .prev-btn,.next-btn{display:none;}
   }
 </style>
 </head>
 <body>
-<audio id="bgMusic" loop preload="auto">
-  <source src="https://music.163.com/song/media/outer/url?id=2027064411.mp3" type="audio/mpeg">
-
-
-<button class="music-btn" id="musicBtn">🎵</button>
-
 <canvas id="particles"></canvas>
 <div class="ribbon one"></div>
 <div class="ribbon two"></div>
 
 <div class="container">
   <section class="hero fade-item">
-    <h1 class="glow-title" id="titleClick">何彦秀</h1>
+    <h1 class="glow-title">何彦秀</h1>
     <div class="hero-sub">时光温柔，慢慢长大</div>
     <div class="deco-line"></div>
-    <div class="tip-bar">✨ 单击图片放大｜方向键切换图片｜右上角音符开启音乐 ✨</div>
+    <div class="tip-bar">✨ 记录岁岁成长 ✨</div>
   </section>
 
   <!-- ========== 17岁 ========== -->
@@ -433,83 +341,7 @@
   </section>
 </div>
 
-<div class="lightbox" id="lightbox">
-  <div class="lightbox-box">
-    <button class="close-preview" id="closePreview">✕</button>
-    <button class="prev-btn" id="prevImg">◀</button>
-    <img id="lightboxImg" />
-    <button class="next-btn" id="nextImg">▶</button>
-  </div>
-</div>
-
 <script>
-  // 音乐控制 + 默认音量0.35，不吵
-  const bgMusic = document.getElementById('bgMusic');
-  bgMusic.volume = 0.35;
-  const musicBtn = document.getElementById('musicBtn');
-  let musicOn = false;
-  musicBtn.onclick = ()=>{
-    if(!musicOn){
-      bgMusic.play();
-      musicBtn.classList.add('playing');
-      musicBtn.innerText = '🔊';
-      musicOn = true;
-    }else{
-      bgMusic.pause();
-      musicBtn.classList.remove('playing');
-      musicBtn.innerText = '🎵';
-      musicOn = false;
-    }
-  }
-
-  // 收集所有图片，用于预览切换
-  const allImgs = Array.from(document.querySelectorAll('.photo-item img'));
-  let currentIndex = 0;
-
-  const photoItems = document.querySelectorAll('.photo-item');
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightboxImg');
-  const closePreview = document.getElementById('closePreview');
-  const prevImgBtn = document.getElementById('prevImg');
-  const nextImgBtn = document.getElementById('nextImg');
-
-  // 图片单击放大
-  photoItems.forEach((item,idx) => {
-    item.addEventListener('click', (e) => {
-      currentIndex = idx;
-      lightboxImg.src = allImgs[idx].src;
-      lightbox.classList.add('active');
-      burst(e.clientX, e.clientY);
-    })
-  });
-
-  // 预览关闭、上一张、下一张
-  lightbox.addEventListener('click', (e) => {
-    if(e.target === lightbox) lightbox.classList.remove('active');
-  });
-  closePreview.onclick = ()=> lightbox.classList.remove('active');
-  prevImgBtn.onclick = ()=>{
-    currentIndex = (currentIndex -1 + allImgs.length) % allImgs.length;
-    lightboxImg.src = allImgs[currentIndex].src;
-  }
-  nextImgBtn.onclick = ()=>{
-    currentIndex = (currentIndex +1) % allImgs.length;
-    lightboxImg.src = allImgs[currentIndex].src;
-  }
-  // 键盘交互：方向键切换、ESC关闭
-  document.addEventListener('keydown',(e)=>{
-    if(!lightbox.classList.contains('active')) return;
-    if(e.key === 'Escape') lightbox.classList.remove('active');
-    if(e.key === 'ArrowLeft'){
-      currentIndex = (currentIndex -1 + allImgs.length) % allImgs.length;
-      lightboxImg.src = allImgs[currentIndex].src;
-    }
-    if(e.key === 'ArrowRight'){
-      currentIndex = (currentIndex +1) % allImgs.length;
-      lightboxImg.src = allImgs[currentIndex].src;
-    }
-  })
-
   // 点击炸开星光
   function burst(x, y) {
     const symbols = ['✨', '💫', '🌟', '💖', '🌈', '🎀','🌷','☁️'];
@@ -553,19 +385,6 @@
     setTimeout(() => el.remove(), 13000);
   }
   setInterval(()=>createFalling(), 420);
-
-  // 彩蛋：点击标题，樱花雨
-  let clickCount = 0;
-  const titleClick = document.getElementById('titleClick');
-  titleClick.addEventListener('click',()=>{
-    clickCount++;
-    if(clickCount >=3){
-      clickCount = 0;
-      for(let i=0;i<50;i++){
-        setTimeout(()=>createFalling('🌸'),i*40);
-      }
-    }
-  })
 
   // 滚动入场监听
   const fadeItems = document.querySelectorAll('.fade-item');

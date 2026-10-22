@@ -3,135 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>heyanxiu · 生活碎片</title>
+    <title>何彦秀 · 成长记录</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            /* 护眼豆沙绿 RGB:204,232,207 */
+            background-color: #cce8cf;
+            font-family: "微软雅黑",sans-serif;
+            padding:40px 20px;
         }
-        body {
-            background: #fff8fa;
-            padding: 50px 20px;
+        .title-box{
+            text-align:center;
+            margin-bottom:45px;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 45px;
+        h1{
+            color:#2c442e;
+            font-size:32px;
+            letter-spacing:4px;
         }
-        h1 {
-            color: #444;
-            font-size: 32px;
-            font-weight: 500;
-            margin-bottom: 12px;
+        .sub-text{
+            color:#4b6b4d;
+            margin-top:12px;
+            font-size:17px;
         }
-        .subtitle {
-            color: #999;
-            font-size: 16px;
-            letter-spacing: 2px;
+        .container{
+            max-width:1100px;
+            margin:0 auto;
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+            gap:26px;
         }
-        /* 相册网格排版 */
-        .photo-gallery {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
+        .img-item{
+            overflow:hidden;
+            border-radius:14px;
+            background:#fff;
+            padding:8px;
+            transition:0.3s ease;
+            cursor:pointer;
         }
-        .photo-item img {
-            width: 100%;
-            height: 340px;
-            object-fit: cover;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-        }
-        .photo-item img:hover {
+        .img-item:hover{
             transform: translateY(-6px);
-            box-shadow: 0 10px 24px rgba(0,0,0,0.13);
+            box-shadow:0 8px 20px #00000022;
         }
-        .words {
-            max-width: 700px;
-            margin: 60px auto 0;
-            text-align: center;
-            color: #777;
-            line-height: 2;
-            font-size: 17px;
+        .img-item img{
+            width:100%;
+            height:240px;
+            object-fit:cover;
+            display:block;
+            border-radius:8px;
         }
-        /* 点击放大弹窗 */
-        .lightbox {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.88);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
+        .footer-tip{
+            text-align:center;
+            margin-top:60px;
+            color:#4b6b4d;
         }
-        .lightbox.active {
-            display: flex;
+        /* 点击图片放大弹窗 */
+        .lightbox{
+            position:fixed;
+            top:0;left:0;right:0;bottom:0;
+            background:rgba(0,0,0,0.82);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            z-index:99;
+            padding:20px;
         }
-        .lightbox img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 8px;
+        .lightbox img{
+            max-width:90%;
+            max-height:90%;
+            border-radius:6px;
         }
-        .close-btn {
-            position: absolute;
-            top: 24px;
-            right: 32px;
-            color: #fff;
-            font-size: 42px;
-            cursor: pointer;
-            user-select: none;
-        }
+        .lightbox.active{display:flex;}
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>heyanxiu · 生活碎片</h1>
-        <div class="subtitle">收集每一个温柔瞬间</div>
+    <div class="title-box">
+        <h1>何彦秀</h1>
+        <div class="sub-text">从高中到现在的成长记录</div>
     </div>
 
-    <div class="photo-gallery">
-        <div class="photo-item">
-            <img src="agr.jpg" onclick="openPic(this.src)">
-        </div>
-        <div class="photo-item">
-            <img src="dr.jpg" onclick="openPic(this.src)">
-        </div>
-        <div class="photo-item">
-            <img src="eg.jpg" onclick="openPic(this.src)">
-        </div>
-        <div class="photo-item">
-            <img src="fj.jpg" onclick="openPic(this.src)">
-        </div>
-        <div class="photo-item">
-            <img src="fwra.jpg" onclick="openPic(this.src)">
-        </div>
+    <div class="container">
+        <div class="img-item"><img src="agr.jpg" alt="成长照片"></div>
+        <div class="img-item"><img src="dr.jpg" alt="成长照片"></div>
+        <div class="img-item"><img src="eg.jpg" alt="成长照片"></div>
+        <div class="img-item"><img src="fjp.jpg" alt="成长照片"></div>
+        <div class="img-item"><img src="fwa.jpg" alt="成长照片"></div>
     </div>
 
-    <div class="words">
-        这里写上想对她说的话
+    <div class="footer-tip">
+        慢慢成长，闪闪发光 ✨
     </div>
 
     <div class="lightbox" id="lb">
-        <span class="close-btn" onclick="closePic()">×</span>
-        <img id="bigImg">
+        <img id="lbimg">
     </div>
-
     <script>
-        function openPic(src){
-            document.getElementById('bigImg').src = src;
-            document.getElementById('lb').classList.add('active');
-        }
-        function closePic(){
-            document.getElementById('lb').classList.remove('active');
-        }
+        const box = document.getElementById('lb');
+        const lbimg = document.getElementById('lbimg');
+        document.querySelectorAll('.img-item img').forEach(img=>{
+            img.onclick = ()=>{
+                lbimg.src = img.src;
+                box.classList.add('active');
+            }
+        })
+        box.onclick = ()=> box.classList.remove('active');
     </script>
 </body>
 </html>

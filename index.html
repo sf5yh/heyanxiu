@@ -1,112 +1,549 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>何彦秀 · 成长记录</title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{
-            /* 护眼豆沙绿 RGB:204,232,207 */
-            background-color: #cce8cf;
-            font-family: "微软雅黑",sans-serif;
-            padding:40px 20px;
-        }
-        .title-box{
-            text-align:center;
-            margin-bottom:45px;
-        }
-        h1{
-            color:#2c442e;
-            font-size:32px;
-            letter-spacing:4px;
-        }
-        .sub-text{
-            color:#4b6b4d;
-            margin-top:12px;
-            font-size:17px;
-        }
-        .container{
-            max-width:1100px;
-            margin:0 auto;
-            display:grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
-            gap:26px;
-        }
-        .img-item{
-            overflow:hidden;
-            border-radius:14px;
-            background:#fff;
-            padding:8px;
-            transition:0.3s ease;
-            cursor:pointer;
-        }
-        .img-item:hover{
-            transform: translateY(-6px);
-            box-shadow:0 8px 20px #00000022;
-        }
-        .img-item img{
-            width:100%;
-            height:240px;
-            object-fit:cover;
-            display:block;
-            border-radius:8px;
-        }
-        .footer-tip{
-            text-align:center;
-            margin-top:60px;
-            color:#4b6b4d;
-        }
-        /* 点击图片放大弹窗 */
-        .lightbox{
-            position:fixed;
-            top:0;left:0;right:0;bottom:0;
-            background:rgba(0,0,0,0.82);
-            display:none;
-            align-items:center;
-            justify-content:center;
-            z-index:99;
-            padding:20px;
-        }
-        .lightbox img{
-            max-width:90%;
-            max-height:90%;
-            border-radius:6px;
-        }
-        .lightbox.active{display:flex;}
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>何彦秀 · 成长记录</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    font-family: "微软雅黑", "PingFang SC", sans-serif;
+    background: linear-gradient(-45deg, #ffd6e7, #c9f0ff, #d7ffd9, #fff6c2, #ffd6f5);
+    background-size: 400% 400%;
+    animation: gradientMove 12s ease infinite;
+    color: #333;
+    overflow-x: hidden;
+    padding: 40px 20px;
+  }
+
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* 粒子画布 */
+  #particles {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* 飘落元素 */
+  .falling {
+    position: fixed;
+    top: -40px;
+    font-size: 22px;
+    z-index: 1;
+    animation: fall linear infinite;
+    pointer-events: none;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); }
+  }
+
+  /* 彩带 */
+  .ribbon {
+    position: fixed;
+    top: 0;
+    width: 140%;
+    height: 18px;
+    background: linear-gradient(90deg, #ff9ec7, #ffd36e, #74e0ff, #b088ff, #ff9ec7);
+    background-size: 300% 100%;
+    animation: ribbonMove 6s linear infinite;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+  }
+  .ribbon.one { left: -20%; top: 8%; transform: rotate(-4deg); }
+  .ribbon.two { left: -20%; top: 78%; transform: rotate(5deg); }
+  @keyframes ribbonMove {
+    to { background-position: 300% 0; }
+  }
+
+  .container {
+    position: relative;
+    z-index: 5;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* 标题区 */
+  .hero {
+    text-align: center;
+    padding: 30px 20px 50px;
+    position: relative;
+  }
+
+  .glow-title {
+    font-size: 54px;
+    font-weight: 900;
+    letter-spacing: 8px;
+    background: linear-gradient(90deg, #ff5ea8, #ffb347, #5ec8ff, #b56bff, #ff5ea8);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: titleShine 4s linear infinite;
+    text-shadow: 0 0 25px rgba(255, 182, 220, 0.6);
+    filter: drop-shadow(0 0 18px rgba(255, 105, 180, 0.45));
+  }
+
+  @keyframes titleShine {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+
+  .hero-sub {
+    margin-top: 14px;
+    font-size: 20px;
+    color: #5a3d7a;
+    letter-spacing: 4px;
+    animation: fadeInUp 1.4s ease both;
+  }
+
+  .deco-line {
+    width: 220px;
+    height: 4px;
+    margin: 20px auto;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #ff9ec7, #ffd36e, #74e0ff, #b088ff);
+    box-shadow: 0 0 12px rgba(255, 105, 180, 0.5);
+  }
+
+  .tip-bar {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.55);
+    color: #7a3d5a;
+    font-size: 14px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 24px rgba(255, 150, 200, 0.25);
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 照片墙 */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+    padding: 20px 0 60px;
+  }
+
+  .card {
+    perspective: 1200px;
+    height: 340px;
+    cursor: pointer;
+    animation: fadeInUp 1.2s ease both;
+  }
+  .card:nth-child(1) { animation-delay: 0.1s; }
+  .card:nth-child(2) { animation-delay: 0.25s; }
+  .card:nth-child(3) { animation-delay: 0.4s; }
+  .card:nth-child(4) { animation-delay: 0.55s; }
+  .card:nth-child(5) { animation-delay: 0.7s; }
+
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 22px;
+    transform-style: preserve-3d;
+    transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 15px 35px rgba(255, 105, 180, 0.35);
+  }
+
+  .card:hover .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 22px;
+    backface-visibility: hidden;
+    overflow: hidden;
+  }
+
+  .card-front {
+    background: #fff;
+    padding: 12px;
+    border: 3px solid transparent;
+    background-image: linear-gradient(#fff, #fff), linear-gradient(135deg, #ff9ec7, #ffd36e, #74e0ff, #b088ff);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+
+  .card-front img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 14px;
+    transition: transform 0.6s ease;
+  }
+
+  .card:hover .card-front img {
+    transform: scale(1.08);
+  }
+
+  .card-label {
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: #7a3d7a;
+    letter-spacing: 2px;
+  }
+
+  .card-back {
+    transform: rotateY(180deg);
+    background: linear-gradient(135deg, #ffb3e6, #c9f0ff, #d7ffd9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    border: 3px solid #fff;
+  }
+
+  .card-back h3 {
+    font-size: 24px;
+    color: #5a2d7a;
+    margin-bottom: 12px;
+  }
+
+  .card-back p {
+    font-size: 15px;
+    color: #4a3d5a;
+    line-height: 1.8;
+  }
+
+  .card-back .sparkle {
+    font-size: 30px;
+    margin-top: 10px;
+    animation: sparkle 1.4s infinite;
+  }
+
+  @keyframes sparkle {
+    0%, 100% { transform: scale(1) rotate(0); opacity: 1; }
+    50% { transform: scale(1.3) rotate(10deg); opacity: 0.7; }
+  }
+
+  /* 底部 */
+  .footer {
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+    z-index: 5;
+  }
+
+  .footer h2 {
+    font-size: 30px;
+    background: linear-gradient(90deg, #ff5ea8, #b56bff, #5ec8ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .footer p {
+    margin-top: 10px;
+    color: #5a3d7a;
+    letter-spacing: 2px;
+  }
+
+  .btn-magic {
+    margin-top: 24px;
+    padding: 14px 34px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #ff5ea8, #ffb347, #5ec8ff, #b56bff);
+    background-size: 300% 300%;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(255, 105, 180, 0.45);
+    animation: titleShine 3s linear infinite;
+    transition: transform 0.3s ease;
+  }
+  .btn-magic:hover {
+    transform: translateY(-4px) scale(1.06);
+  }
+
+  /* 灯箱 */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 10, 50, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .lightbox.active { display: flex; }
+  .lightbox img {
+    max-width: 92%;
+    max-height: 92vh;
+    border-radius: 16px;
+    border: 4px solid #fff;
+    box-shadow: 0 0 60px rgba(255, 192, 240, 0.8);
+    animation: popIn 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  }
+  @keyframes popIn {
+    from { transform: scale(0.6); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  /* 点击爆裂特效 */
+  .burst {
+    position: fixed;
+    pointer-events: none;
+    font-size: 26px;
+    z-index: 9999;
+    animation: burst 1s ease-out forwards;
+  }
+  @keyframes burst {
+    0% { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(1.2); opacity: 0; }
+  }
+
+  @media (max-width: 600px) {
+    .glow-title { font-size: 36px; letter-spacing: 4px; }
+    .hero-sub { font-size: 16px; }
+    .card { height: 320px; }
+  }
+</style>
 </head>
 <body>
-    <div class="title-box">
-        <h1>何彦秀</h1>
-        <div class="sub-text">从高中到现在的成长记录</div>
+
+<canvas id="particles"></canvas>
+<div class="ribbon one"></div>
+<div class="ribbon two"></div>
+
+<div class="container">
+  <section class="hero">
+    <h1 class="glow-title">何彦秀</h1>
+    <div class="hero-sub">从高中到现在的成长记录</div>
+    <div class="deco-line"></div>
+    <div class="tip-bar">✨ 慢慢长大，慢慢闪光 ✨</div>
+  </section>
+
+  <section class="gallery">
+
+    <div class="card" data-msg="这是起点，那些认真又青涩的日子，值得被记住。">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="agr.jpg" alt="成长照片">
+          <div class="card-label">高中起点</div>
+        </div>
+        <div class="card-face card-back">
+          <h3>高中起点</h3>
+          <p>这是起点，那些认真又青涩的日子，值得被记住。</p>
+          <div class="sparkle">✨</div>
+        </div>
+      </div>
     </div>
 
-    <div class="container">
-        <div class="img-item"><img src="agr.jpg" alt="成长照片"></div>
-        <div class="img-item"><img src="dr.jpg" alt="成长照片"></div>
-        <div class="img-item"><img src="eg.jpg" alt="成长照片"></div>
-        <div class="img-item"><img src="fjp.jpg" alt="成长照片"></div>
-        <div class="img-item"><img src="fwa.jpg" alt="成长照片"></div>
+    <div class="card" data-msg="一路摸索，一路跌倒，也一路悄悄变强。">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="dr.jpg" alt="成长照片">
+          <div class="card-label">慢慢进步</div>
+        </div>
+        <div class="card-face card-back">
+          <h3>慢慢进步</h3>
+          <p>一路摸索，一路跌倒，也一路悄悄变强。</p>
+          <div class="sparkle">💫</div>
+        </div>
+      </div>
     </div>
 
-    <div class="footer-tip">
-        慢慢成长，闪闪发光 ✨
+    <div class="card" data-msg="走进更喜欢的生活，把热爱一点点变成日常。">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="eg.jpg" alt="成长照片">
+          <div class="card-label">奔赴热爱</div>
+        </div>
+        <div class="card-face card-back">
+          <h3>奔赴热爱</h3>
+          <p>走进更喜欢的生活，把热爱一点点变成日常。</p>
+          <div class="sparkle">🌟</div>
+        </div>
+      </div>
     </div>
 
-    <div class="lightbox" id="lb">
-        <img id="lbimg">
+    <div class="card" data-msg="每一次练习都不算白费，它们正在悄悄拼成未来。">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="fj.jpg" alt="成长照片">
+          <div class="card-label">认真练习</div>
+        </div>
+        <div class="card-face card-back">
+          <h3>认真练习</h3>
+          <p>每一次练习都不算白费，它们正在悄悄拼成未来。</p>
+          <div class="sparkle">💥</div>
+        </div>
+      </div>
     </div>
-    <script>
-        const box = document.getElementById('lb');
-        const lbimg = document.getElementById('lbimg');
-        document.querySelectorAll('.img-item img').forEach(img=>{
-            img.onclick = ()=>{
-                lbimg.src = img.src;
-                box.classList.add('active');
-            }
-        })
-        box.onclick = ()=> box.classList.remove('active');
-    </script>
+
+    <div class="card" data-msg="继续勇敢，继续闪闪发光，成为自己喜欢的模样。">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="fwra.jpg" alt="成长照片">
+          <div class="card-label">继续发光</div>
+        </div>
+        <div class="card-face card-back">
+          <h3>继续发光</h3>
+          <p>继续勇敢，继续闪闪发光，成为自己喜欢的模样。</p>
+          <div class="sparkle">🌈</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="footer">
+    <h2>时光缓缓，自有力量</h2>
+    <p>愿你永远热烈，永远被爱，永远有重新开始的勇气 ✨</p>
+    <button class="btn-magic" onclick="startMagic()">点我变魔法</button>
+  </section>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <img id="lightboxImg" />
+</div>
+
+<script>
+  // 卡片翻转 & 灯箱
+  const cards = document.querySelectorAll('.card');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+
+  cards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const img = card.querySelector('img');
+      lightboxImg.src = img.src;
+      lightbox.classList.add('active');
+      burst(e.clientX, e.clientY);
+    });
+  });
+
+  lightbox.addEventListener('click', () => {
+    lightbox.classList.remove('active');
+  });
+
+  // 点击爆裂特效
+  function burst(x, y) {
+    const symbols = ['✨', '💫', '🌟', '💖', '🌈', '🎀'];
+    for (let i = 0; i < 10; i++) {
+      const el = document.createElement('div');
+      el.className = 'burst';
+      el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      const angle = (Math.PI * 2 * i) / 10;
+      const dist = 120 + Math.random() * 80;
+      el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+      el.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1000);
+    }
+  }
+
+  // 飘落爱心/星星
+  function createFalling() {
+    const symbols = ['💖', '✨', '🌟', '💫', '🎀', '🌸'];
+    const el = document.createElement('div');
+    el.className = 'falling';
+    el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (6 + Math.random() * 6) + 's';
+    el.style.fontSize = (18 + Math.random() * 18) + 'px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 12000);
+  }
+  setInterval(createFalling, 450);
+
+  // 粒子背景
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 4 + 1;
+      this.speedX = (Math.random() - 0.5) * 0.6;
+      this.speedY = (Math.random() - 0.5) * 0.6;
+      this.color = ['#ff9ec7', '#ffd36e', '#74e0ff', '#b088ff', '#ffb3e6'][Math.floor(Math.random() * 5)];
+      this.life = Math.random() * 100;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.life++;
+      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height || this.life > 200) {
+        this.reset();
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = this.color;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // 鼠标附近粒子连线
+  let mouse = { x: null, y: null };
+  window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+
+  // 魔法按钮
+  function startMagic() {
+    for (let i = 0; i < 20; i++) {
+      setTimeout(createFalling, i * 120);
+    }
+  }
+</script>
+
 </body>
 </html>

@@ -6,14 +6,15 @@
 <title>何彦秀 · 成长记录</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
   body {
     min-height: 100vh;
     font-family: "微软雅黑", "PingFang SC", sans-serif;
-    background: linear-gradient(-45deg, #ffd6e7, #c9f0ff, #d7ffd9, #fff6c2, #ffd6f5);
+    background: linear-gradient(-45deg, #ffe6ef, #e6f7ff, #e8fff0, #fff8e8, #ffe8f4);
     background-size: 400% 400%;
-    animation: gradientMove 12s ease infinite;
-    color: #333;
+    animation: gradientMove 14s ease infinite;
+    color: #443344;
     overflow-x: hidden;
     padding: 40px 20px;
   }
@@ -24,7 +25,6 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* 粒子画布 */
   #particles {
     position: fixed;
     inset: 0;
@@ -32,7 +32,20 @@
     pointer-events: none;
   }
 
-  /* 飘落元素 */
+  /* 鼠标跟随爱心 */
+  .heart-follow{
+    position:fixed;
+    font-size:16px;
+    pointer-events:none;
+    z-index:9999;
+    opacity:0.7;
+    animation:heartFloat 0.8s ease-out forwards;
+  }
+  @keyframes heartFloat{
+    0%{transform:translate(-50%,-50%) scale(1);opacity:0.8;}
+    100%{transform:translate(-50%,-100%) scale(1.6);opacity:0;}
+  }
+
   .falling {
     position: fixed;
     top: -40px;
@@ -45,20 +58,19 @@
     to { transform: translateY(110vh) rotate(360deg); }
   }
 
-  /* 彩带 */
   .ribbon {
     position: fixed;
     top: 0;
     width: 140%;
-    height: 18px;
-    background: linear-gradient(90deg, #ff9ec7, #ffd36e, #74e0ff, #b088ff, #ff9ec7);
+    height: 16px;
+    background: linear-gradient(90deg, #ffb8d1, #ffdf9e, #9de0ff, #c7b0ff, #ffb8d1);
     background-size: 300% 100%;
-    animation: ribbonMove 6s linear infinite;
+    animation: ribbonMove 7s linear infinite;
     z-index: 2;
-    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+    box-shadow: 0 3px 10px rgba(255, 150, 190, 0.35);
   }
-  .ribbon.one { left: -20%; top: 8%; transform: rotate(-4deg); }
-  .ribbon.two { left: -20%; top: 78%; transform: rotate(5deg); }
+  .ribbon.one { left: -20%; top: 7%; transform: rotate(-3deg); }
+  .ribbon.two { left: -20%; top: 79%; transform: rotate(4deg); }
   @keyframes ribbonMove {
     to { background-position: 300% 0; }
   }
@@ -66,29 +78,57 @@
   .container {
     position: relative;
     z-index: 5;
-    max-width: 1200px;
+    max-width: 1240px;
     margin: 0 auto;
   }
 
-  /* 标题区 */
   .hero {
     text-align: center;
     padding: 30px 20px 50px;
     position: relative;
   }
+  /* 音乐按钮 */
+  .music-btn{
+    position:fixed;
+    top:24px;
+    right:24px;
+    z-index:10;
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    border:none;
+    background:rgba(255,255,255,0.65);
+    backdrop-filter:blur(8px);
+    box-shadow:0 4px 14px rgba(255,140,180,0.3);
+    font-size:24px;
+    cursor:pointer;
+    transition:0.3s;
+  }
+  .music-btn:hover{
+    transform:scale(1.1);
+    background:#fff;
+  }
+  .music-btn.playing{
+    animation:musicRotate 3s linear infinite;
+  }
+  @keyframes musicRotate{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
 
   .glow-title {
-    font-size: 54px;
+    font-size: 56px;
     font-weight: 900;
     letter-spacing: 8px;
-    background: linear-gradient(90deg, #ff5ea8, #ffb347, #5ec8ff, #b56bff, #ff5ea8);
+    background: linear-gradient(90deg, #ff74a9, #ffc266, #69cfff, #b87dff, #ff74a9);
     background-size: 300% 300%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: titleShine 4s linear infinite;
-    text-shadow: 0 0 25px rgba(255, 182, 220, 0.6);
-    filter: drop-shadow(0 0 18px rgba(255, 105, 180, 0.45));
+    animation: titleShine 4.5s linear infinite;
+    filter: drop-shadow(0 0 20px rgba(255, 110, 170, 0.4));
+    transition: opacity 0.4s ease;
+    cursor:pointer;
   }
 
   @keyframes titleShine {
@@ -99,381 +139,637 @@
   .hero-sub {
     margin-top: 14px;
     font-size: 20px;
-    color: #5a3d7a;
+    color: #6b4b78;
     letter-spacing: 4px;
-    animation: fadeInUp 1.4s ease both;
+    transition: opacity 0.4s ease;
   }
 
   .deco-line {
-    width: 220px;
+    width: 240px;
     height: 4px;
-    margin: 20px auto;
+    margin: 22px auto;
     border-radius: 4px;
-    background: linear-gradient(90deg, #ff9ec7, #ffd36e, #74e0ff, #b088ff);
-    box-shadow: 0 0 12px rgba(255, 105, 180, 0.5);
+    background: linear-gradient(90deg, #ffb8d1, #ffdf9e, #9de0ff, #c7b0ff);
+    box-shadow: 0 0 14px rgba(255, 150, 190, 0.45);
   }
 
   .tip-bar {
     display: inline-block;
-    margin-top: 10px;
-    padding: 10px 22px;
+    margin-top: 12px;
+    padding: 11px 24px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.55);
-    color: #7a3d5a;
+    background: rgba(255, 255, 255, 0.6);
+    color: #804864;
     font-size: 14px;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 8px 24px rgba(255, 150, 200, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.85);
   }
 
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* 滚动入场动画 */
+  .fade-item{
+    opacity:0;
+    transform: translateY(40px);
+    transition: 0.8s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .fade-item.show{
+    opacity:1;
+    transform: translateY(0);
   }
 
-  /* 照片墙 */
+  .age-section{
+    margin:70px 0;
+  }
+  .age-title{
+    text-align:center;
+    font-size:32px;
+    color:#603675;
+    margin-bottom:28px;
+    letter-spacing:4px;
+  }
   .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 30px;
-    padding: 20px 0 60px;
+    gap: 32px;
   }
 
   .card {
-    perspective: 1200px;
-    height: 340px;
+    perspective: 1300px;
+    height: 350px;
     cursor: pointer;
-    animation: fadeInUp 1.2s ease both;
   }
-  .card:nth-child(1) { animation-delay: 0.1s; }
-  .card:nth-child(2) { animation-delay: 0.25s; }
-  .card:nth-child(3) { animation-delay: 0.4s; }
-  .card:nth-child(4) { animation-delay: 0.55s; }
-  .card:nth-child(5) { animation-delay: 0.7s; }
-
   .card-inner {
     position: relative;
     width: 100%;
     height: 100%;
-    border-radius: 22px;
+    border-radius: 24px;
     transform-style: preserve-3d;
-    transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
-    box-shadow: 0 15px 35px rgba(255, 105, 180, 0.35);
+    transition: transform 0.95s cubic-bezier(0.2, 0.85, 0.2, 1);
+    box-shadow: 0 16px 38px rgba(255, 130, 180, 0.32);
   }
-
-  .card:hover .card-inner {
+  .card-inner.flip{
     transform: rotateY(180deg);
   }
 
   .card-face {
     position: absolute;
     inset: 0;
-    border-radius: 22px;
+    border-radius: 24px;
     backface-visibility: hidden;
     overflow: hidden;
   }
 
   .card-front {
     background: #fff;
-    padding: 12px;
+    padding: 13px;
     border: 3px solid transparent;
-    background-image: linear-gradient(#fff, #fff), linear-gradient(135deg, #ff9ec7, #ffd36e, #74e0ff, #b088ff);
+    background-image: linear-gradient(#fff, #fff), linear-gradient(135deg, #ffb8d1, #ffdf9e, #9de0ff, #c7b0ff);
     background-origin: border-box;
     background-clip: padding-box, border-box;
+    position:relative;
+    transition: transform 0.3s ease;
+  }
+  .card:hover .card-front{
+    transform: translateY(-6px);
+  }
+  .card-front::after{
+    content:"";
+    position:absolute;
+    inset:-3px;
+    background: linear-gradient(135deg, #ffb8d1, #ffdf9e, #9de0ff, #c7b0ff,#ffb8d1);
+    background-size:400% 400%;
+    border-radius:24px;
+    z-index:-1;
+    opacity:0;
+    transition:0.45s;
+  }
+  .card:hover .card-front::after{
+    opacity:1;
+    animation:borderFlow 3.2s linear infinite;
+  }
+  @keyframes borderFlow{
+    0%{background-position:0% 50%;}
+    100%{background-position:400% 50%;}
   }
 
   .card-front img {
     width: 100%;
-    height: 240px;
+    height: 250px;
     object-fit: cover;
-    border-radius: 14px;
-    transition: transform 0.6s ease;
+    border-radius: 16px;
+    transition: transform 0.65s ease;
   }
-
   .card:hover .card-front img {
-    transform: scale(1.08);
+    transform: scale(1.09);
   }
 
   .card-label {
-    margin-top: 10px;
+    margin-top: 11px;
     text-align: center;
     font-weight: bold;
-    color: #7a3d7a;
+    color: #804864;
     letter-spacing: 2px;
+    font-size:15px;
   }
 
   .card-back {
     transform: rotateY(180deg);
-    background: linear-gradient(135deg, #ffb3e6, #c9f0ff, #d7ffd9);
+    background: linear-gradient(135deg, #ffcfe6, #e1f4ff, #e4ffe9);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: 26px;
     text-align: center;
     border: 3px solid #fff;
   }
 
   .card-back h3 {
-    font-size: 24px;
-    color: #5a2d7a;
-    margin-bottom: 12px;
+    font-size: 26px;
+    color: #603675;
+    margin-bottom: 14px;
   }
 
   .card-back p {
     font-size: 15px;
-    color: #4a3d5a;
-    line-height: 1.8;
+    color: #50405c;
+    line-height: 1.9;
   }
 
   .card-back .sparkle {
-    font-size: 30px;
-    margin-top: 10px;
-    animation: sparkle 1.4s infinite;
+    font-size: 32px;
+    margin-top: 12px;
+    animation: sparkle 1.5s infinite;
   }
 
   @keyframes sparkle {
     0%, 100% { transform: scale(1) rotate(0); opacity: 1; }
-    50% { transform: scale(1.3) rotate(10deg); opacity: 0.7; }
+    50% { transform: scale(1.35) rotate(10deg); opacity: 0.72; }
   }
 
-  /* 底部 */
   .footer {
     text-align: center;
-    padding: 40px 20px 30px;
+    padding: 45px 20px 35px;
     position: relative;
     z-index: 5;
   }
 
   .footer h2 {
-    font-size: 30px;
-    background: linear-gradient(90deg, #ff5ea8, #b56bff, #5ec8ff);
+    font-size: 32px;
+    background: linear-gradient(90deg, #ff74a9, #b87dff, #69cfff);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
   .footer p {
-    margin-top: 10px;
-    color: #5a3d7a;
+    margin-top: 12px;
+    color: #6b4b78;
     letter-spacing: 2px;
   }
 
   .btn-magic {
-    margin-top: 24px;
-    padding: 14px 34px;
+    margin-top: 26px;
+    padding: 15px 36px;
     border: none;
     border-radius: 999px;
-    background: linear-gradient(90deg, #ff5ea8, #ffb347, #5ec8ff, #b56bff);
+    background: linear-gradient(90deg, #ff74a9, #ffc266, #69cfff, #b87dff);
     background-size: 300% 300%;
     color: #fff;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: bold;
     letter-spacing: 3px;
     cursor: pointer;
-    box-shadow: 0 10px 30px rgba(255, 105, 180, 0.45);
-    animation: titleShine 3s linear infinite;
+    box-shadow: 0 11px 32px rgba(255, 120, 175, 0.42);
+    animation: titleShine 3.2s linear infinite;
     transition: transform 0.3s ease;
   }
   .btn-magic:hover {
-    transform: translateY(-4px) scale(1.06);
+    transform: translateY(-5px) scale(1.07);
   }
 
-  /* 灯箱 */
+  /* 大图预览弹窗 */
   .lightbox {
     position: fixed;
     inset: 0;
-    background: rgba(30, 10, 50, 0.85);
+    background: rgba(35, 15, 55, 0.82);
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 999;
-    padding: 20px;
-    backdrop-filter: blur(8px);
+    padding: 22px;
+    backdrop-filter: blur(9px);
   }
   .lightbox.active { display: flex; }
+  .lightbox-box{
+    position:relative;
+  }
   .lightbox img {
     max-width: 92%;
     max-height: 92vh;
-    border-radius: 16px;
+    border-radius: 18px;
     border: 4px solid #fff;
-    box-shadow: 0 0 60px rgba(255, 192, 240, 0.8);
-    animation: popIn 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+    box-shadow: 0 0 65px rgba(255, 200, 240, 0.82);
+    animation: popIn 0.48s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  }
+  /* 预览左右切换按钮 */
+  .prev-btn,.next-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    border:none;
+    background:rgba(255,255,255,0.65);
+    font-size:22px;
+    cursor:pointer;
+  }
+  .prev-btn{left:-60px;}
+  .next-btn{right:-60px;}
+  .close-preview{
+    position:absolute;
+    top:-40px;
+    right:0;
+    background:transparent;
+    border:none;
+    color:#fff;
+    font-size:30px;
+    cursor:pointer;
   }
   @keyframes popIn {
-    from { transform: scale(0.6); opacity: 0; }
+    from { transform: scale(0.62); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
   }
 
-  /* 点击爆裂特效 */
   .burst {
     position: fixed;
     pointer-events: none;
-    font-size: 26px;
+    font-size: 28px;
     z-index: 9999;
-    animation: burst 1s ease-out forwards;
+    animation: burst 1.05s ease-out forwards;
   }
   @keyframes burst {
-    0% { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
-    100% { transform: translate(var(--tx), var(--ty)) scale(1.2); opacity: 0; }
+    0% { transform: translate(-50%, -50%) scale(0.42); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(1.25); opacity: 0; }
   }
 
   @media (max-width: 600px) {
-    .glow-title { font-size: 36px; letter-spacing: 4px; }
-    .hero-sub { font-size: 16px; }
-    .card { height: 320px; }
+    .glow-title { font-size: 38px; letter-spacing: 4px; }
+    .hero-sub { font-size: 17px; }
+    .card { height: 330px; }
+    .music-btn{width:46px;height:46px;font-size:20px;}
+    .prev-btn,.next-btn{display:none;}
   }
 </style>
 </head>
 <body>
+<audio id="bgMusic" loop preload="auto">
+  <source src="https://music.163.com/song/media/outer/url?id=2027064411.mp3" type="audio/mpeg">
+
+
+
+<button class="music-btn" id="musicBtn">🎵</button>
 
 <canvas id="particles"></canvas>
 <div class="ribbon one"></div>
 <div class="ribbon two"></div>
 
 <div class="container">
-  <section class="hero">
-    <h1 class="glow-title">何彦秀</h1>
-    <div class="hero-sub">从高中到现在的成长记录</div>
+  <section class="hero fade-item">
+    <h1 class="glow-title" id="titleClick">何彦秀</h1>
+    <div class="hero-sub">时光温柔，慢慢长大</div>
     <div class="deco-line"></div>
-    <div class="tip-bar">✨ 慢慢长大，慢慢闪光 ✨</div>
+    <div class="tip-bar">✨ 单击看大图｜方向键切换图片｜双击翻转卡片｜右上角音符开启音乐 ✨</div>
   </section>
 
-  <section class="gallery">
-
-    <div class="card" data-msg="这是起点，那些认真又青涩的日子，值得被记住。">
-      <div class="card-inner">
-        <div class="card-face card-front">
-          <img src="agr.jpg" alt="成长照片">
-          <div class="card-label">高中起点</div>
+  <!-- ========== 17岁 ========== -->
+  <section class="age-section fade-item">
+    <h2 class="age-title">📌 17岁 · 青涩花期</h2>
+    <div class="gallery">
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="a1.jpg" alt="17岁">
+            <div class="card-label">17岁</div>
+          </div>
+          <div class="card-face card-back">
+            <h3>17岁</h3>
+            <p>风很轻，阳光很软，是闪闪发光的少年时代。</p>
+            <div class="sparkle">✨</div>
+          </div>
         </div>
-        <div class="card-face card-back">
-          <h3>高中起点</h3>
-          <p>这是起点，那些认真又青涩的日子，值得被记住。</p>
-          <div class="sparkle">✨</div>
+      </div>
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="a2.jpg" alt="17岁">
+            <div class="card-label">17岁</div>
+          </div>
+          <div class="card-face card-back">
+            <h3>17岁</h3>
+            <p>满怀期待，向着心里想去的方向出发。</p>
+            <div class="sparkle">💫</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="a3.jpg" alt="17岁">
+            <div class="card-label">17岁</div>
+          </div>
+          <div class="card-face card-back">
+            <h3>17岁</h3>
+            <p>所有细碎美好的瞬间，都值得好好珍藏。</p>
+            <div class="sparkle">🌸</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="a4.jpg" alt="17岁">
+            <div class="card-label">17岁</div>
+          </div>
+          <div class="card-face card-back">
+            <h3>17岁</h3>
+            <p>不慌不忙，慢慢长成自己喜欢的模样。</p>
+            <div class="sparkle">🌷</div>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="card" data-msg="一路摸索，一路跌倒，也一路悄悄变强。">
-      <div class="card-inner">
-        <div class="card-face card-front">
-          <img src="dr.jpg" alt="成长照片">
-          <div class="card-label">慢慢进步</div>
-        </div>
-        <div class="card-face card-back">
-          <h3>慢慢进步</h3>
-          <p>一路摸索，一路跌倒，也一路悄悄变强。</p>
-          <div class="sparkle">💫</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" data-msg="走进更喜欢的生活，把热爱一点点变成日常。">
-      <div class="card-inner">
-        <div class="card-face card-front">
-          <img src="eg.jpg" alt="成长照片">
-          <div class="card-label">奔赴热爱</div>
-        </div>
-        <div class="card-face card-back">
-          <h3>奔赴热爱</h3>
-          <p>走进更喜欢的生活，把热爱一点点变成日常。</p>
-          <div class="sparkle">🌟</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" data-msg="每一次练习都不算白费，它们正在悄悄拼成未来。">
-      <div class="card-inner">
-        <div class="card-face card-front">
-          <img src="fj.jpg" alt="成长照片">
-          <div class="card-label">认真练习</div>
-        </div>
-        <div class="card-face card-back">
-          <h3>认真练习</h3>
-          <p>每一次练习都不算白费，它们正在悄悄拼成未来。</p>
-          <div class="sparkle">💥</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" data-msg="继续勇敢，继续闪闪发光，成为自己喜欢的模样。">
-      <div class="card-inner">
-        <div class="card-face card-front">
-          <img src="fwra.jpg" alt="成长照片">
-          <div class="card-label">继续发光</div>
-        </div>
-        <div class="card-face card-back">
-          <h3>继续发光</h3>
-          <p>继续勇敢，继续闪闪发光，成为自己喜欢的模样。</p>
-          <div class="sparkle">🌈</div>
-        </div>
-      </div>
-    </div>
-
   </section>
 
-  <section class="footer">
-    <h2>时光缓缓，自有力量</h2>
-    <p>愿你永远热烈，永远被爱，永远有重新开始的勇气 ✨</p>
-    <button class="btn-magic" onclick="startMagic()">点我变魔法</button>
+  <!-- ========== 19岁 ========== -->
+  <section class="age-section fade-item">
+    <h2 class="age-title">📌 19岁 · 奔赴热爱</h2>
+    <div class="gallery">
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="c1.jpg" alt="19岁">
+            <div class="card-label">19岁</div>
+          </div>
+          <div class="card-face card-back">
+            <h3>19岁</h3>
+            <p>遇见喜欢的专业，一点点找到属于自己的热爱。</p>
+            <div class="sparkle">🌟</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="c2.jpg" alt="19岁">
+            <div class="card-label">19岁</div>
+          </div>
+          <div class="card-face card-back">
+            <h3>19岁</h3>
+            <p>在学习里沉淀，慢慢积攒底气与力量。</p>
+            <div class="sparkle">☁️</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="c5.jpg" alt="19岁">
+            <div class="card-label">19岁</div>
+          </div>
+          <div class="card-face card-back">
+            <h3>19岁</h3>
+            <p>保持温柔，也拥有独当一面的勇气。</p>
+            <div class="sparkle">🎐</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 20岁 ========== -->
+  <section class="age-section fade-item">
+    <h2 class="age-title">📌 20岁 · 稳步生长</h2>
+    <div class="gallery">
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="d1.jpg" alt="20岁">
+            <div class="card-label">20岁</div>
+          </div>
+          <div class="card-face card-back">
+            <h3>20岁</h3>
+            <p>和过去告别，奔赴更明亮的前路。</p>
+            <div class="sparkle">💖</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="d2.jpg" alt="20岁">
+            <div class="card-label">20岁</div>
+          </div>
+          <div class="card-face card-back">
+            <h3>20岁</h3>
+            <p>不停练习，让热爱慢慢开出花来。</p>
+            <div class="sparkle">🌈</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="d4.jpg" alt="20岁">
+            <div class="card-label">20岁</div>
+          </div>
+          <div class="card-face card-back">
+            <h3>20岁</h3>
+            <p>接纳所有，继续闪闪发光。</p>
+            <div class="sparkle">✨</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <img src="d6.jpg" alt="20岁">
+            <div class="card-label">20岁</div>
+          </div>
+          <div class="card-face card-back">
+            <h3>20岁</h3>
+            <p>愿永远自在，热烈且自由。</p>
+            <div class="sparkle">🌙</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="footer fade-item">
+    <h2>岁岁年年，万事温柔</h2>
+    <p>愿你永远被偏爱，永远有奔赴美好的勇气 ✨</p>
+    <button class="btn-magic" onclick="startMagic()">点我撒满星光</button>
   </section>
 </div>
 
 <div class="lightbox" id="lightbox">
-  <img id="lightboxImg" />
+  <div class="lightbox-box">
+    <button class="close-preview" id="closePreview">✕</button>
+    <button class="prev-btn" id="prevImg">◀</button>
+    <img id="lightboxImg" />
+    <button class="next-btn" id="nextImg">▶</button>
+  </div>
 </div>
 
 <script>
-  // 卡片翻转 & 灯箱
+  // 音乐控制 + 默认音量0.35，不吵
+  const bgMusic = document.getElementById('bgMusic');
+  bgMusic.volume = 0.35;
+  const musicBtn = document.getElementById('musicBtn');
+  let musicOn = false;
+  musicBtn.onclick = ()=>{
+    if(!musicOn){
+      bgMusic.play();
+      musicBtn.classList.add('playing');
+      musicBtn.innerText = '🔊';
+      musicOn = true;
+    }else{
+      bgMusic.pause();
+      musicBtn.classList.remove('playing');
+      musicBtn.innerText = '🎵';
+      musicOn = false;
+    }
+  }
+
+  // 收集所有图片，用于预览切换
+  const allImgs = Array.from(document.querySelectorAll('.card-front img'));
+  let currentIndex = 0;
+
   const cards = document.querySelectorAll('.card');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
+  const closePreview = document.getElementById('closePreview');
+  const prevImgBtn = document.getElementById('prevImg');
+  const nextImgBtn = document.getElementById('nextImg');
 
-  cards.forEach(card => {
+  // 卡片点击逻辑：单击大图，双击翻转
+  cards.forEach((card,idx) => {
+    let timer = null;
+    let isDouble = false;
     card.addEventListener('click', (e) => {
-      const img = card.querySelector('img');
-      lightboxImg.src = img.src;
-      lightbox.classList.add('active');
+      timer = setTimeout(()=>{
+        if(!isDouble){
+          currentIndex = idx;
+          lightboxImg.src = allImgs[idx].src;
+          lightbox.classList.add('active');
+          burst(e.clientX, e.clientY);
+        }
+        isDouble = false;
+      },250)
+    })
+    card.addEventListener('dblclick',(e)=>{
+      clearTimeout(timer);
+      isDouble = true;
+      card.querySelector('.card-inner').classList.toggle('flip');
       burst(e.clientX, e.clientY);
-    });
+    })
   });
 
-  lightbox.addEventListener('click', () => {
-    lightbox.classList.remove('active');
+  // 预览关闭、上一张、下一张
+  lightbox.addEventListener('click', (e) => {
+    if(e.target === lightbox) lightbox.classList.remove('active');
   });
+  closePreview.onclick = ()=> lightbox.classList.remove('active');
+  prevImgBtn.onclick = ()=>{
+    currentIndex = (currentIndex -1 + allImgs.length) % allImgs.length;
+    lightboxImg.src = allImgs[currentIndex].src;
+  }
+  nextImgBtn.onclick = ()=>{
+    currentIndex = (currentIndex +1) % allImgs.length;
+    lightboxImg.src = allImgs[currentIndex].src;
+  }
+  // 键盘交互：方向键切换、ESC关闭
+  document.addEventListener('keydown',(e)=>{
+    if(!lightbox.classList.contains('active')) return;
+    if(e.key === 'Escape') lightbox.classList.remove('active');
+    if(e.key === 'ArrowLeft'){
+      currentIndex = (currentIndex -1 + allImgs.length) % allImgs.length;
+      lightboxImg.src = allImgs[currentIndex].src;
+    }
+    if(e.key === 'ArrowRight'){
+      currentIndex = (currentIndex +1) % allImgs.length;
+      lightboxImg.src = allImgs[currentIndex].src;
+    }
+  })
 
-  // 点击爆裂特效
+  // 点击炸开星光
   function burst(x, y) {
-    const symbols = ['✨', '💫', '🌟', '💖', '🌈', '🎀'];
-    for (let i = 0; i < 10; i++) {
+    const symbols = ['✨', '💫', '🌟', '💖', '🌈', '🎀','🌷','☁️'];
+    for (let i = 0; i < 12; i++) {
       const el = document.createElement('div');
       el.className = 'burst';
       el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
       el.style.left = x + 'px';
       el.style.top = y + 'px';
-      const angle = (Math.PI * 2 * i) / 10;
-      const dist = 120 + Math.random() * 80;
+      const angle = (Math.PI * 2 * i) / 12;
+      const dist = 130 + Math.random() * 90;
       el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
       el.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
       document.body.appendChild(el);
-      setTimeout(() => el.remove(), 1000);
+      setTimeout(() => el.remove(), 1050);
     }
   }
+  // 鼠标移动飘爱心
+  document.addEventListener('mousemove',(e)=>{
+    if(Math.random()>0.85){
+      const heart = document.createElement('div');
+      heart.className = 'heart-follow';
+      heart.innerText = '💗';
+      heart.style.left = e.clientX + 'px';
+      heart.style.top = e.clientY + 'px';
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(),800);
+    }
+  })
 
-  // 飘落爱心/星星
-  function createFalling() {
-    const symbols = ['💖', '✨', '🌟', '💫', '🎀', '🌸'];
+  // 飘落元素
+  function createFalling(symbol){
+    const symbols = symbol ? [symbol] : ['💖', '✨', '🌟', '💫', '🎀', '🌸','🌷','☁️'];
     const el = document.createElement('div');
     el.className = 'falling';
     el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
     el.style.left = Math.random() * 100 + 'vw';
-    el.style.animationDuration = (6 + Math.random() * 6) + 's';
-    el.style.fontSize = (18 + Math.random() * 18) + 'px';
+    el.style.animationDuration = (6.5 + Math.random() * 6.5) + 's';
+    el.style.fontSize = (18 + Math.random() * 20) + 'px';
     document.body.appendChild(el);
-    setTimeout(() => el.remove(), 12000);
+    setTimeout(() => el.remove(), 13000);
   }
-  setInterval(createFalling, 450);
+  setInterval(()=>createFalling(), 420);
+
+  // 彩蛋：点击标题，樱花雨
+  let clickCount = 0;
+  const titleClick = document.getElementById('titleClick');
+  titleClick.addEventListener('click',()=>{
+    clickCount++;
+    if(clickCount >=3){
+      clickCount = 0;
+      for(let i=0;i<50;i++){
+        setTimeout(()=>createFalling('🌸'),i*40);
+      }
+    }
+  })
+
+  // 滚动入场监听
+  const fadeItems = document.querySelectorAll('.fade-item');
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(item=>{
+      if(item.isIntersecting){
+        item.target.classList.add('show');
+      }
+    })
+  },{threshold:0.18})
+  fadeItems.forEach(el=>observer.observe(el));
 
   // 粒子背景
   const canvas = document.getElementById('particles');
@@ -494,17 +790,17 @@
     reset() {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 4 + 1;
+      this.size = Math.random() * 4.2 + 1;
       this.speedX = (Math.random() - 0.5) * 0.6;
       this.speedY = (Math.random() - 0.5) * 0.6;
-      this.color = ['#ff9ec7', '#ffd36e', '#74e0ff', '#b088ff', '#ffb3e6'][Math.floor(Math.random() * 5)];
+      this.color = ['#ffb8d1', '#ffdf9e', '#9de0ff', '#c7b0ff', '#ffcfe6'][Math.floor(Math.random() * 5)];
       this.life = Math.random() * 100;
     }
     update() {
       this.x += this.speedX;
       this.y += this.speedY;
       this.life++;
-      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height || this.life > 200) {
+      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height || this.life > 210) {
         this.reset();
       }
     }
@@ -512,13 +808,13 @@
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
       ctx.fillStyle = this.color;
-      ctx.shadowBlur = 10;
+      ctx.shadowBlur = 11;
       ctx.shadowColor = this.color;
       ctx.fill();
     }
   }
 
-  for (let i = 0; i < 80; i++) particles.push(new Particle());
+  for (let i = 0; i < 85; i++) particles.push(new Particle());
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -530,19 +826,21 @@
   }
   animate();
 
-  // 鼠标附近粒子连线
-  let mouse = { x: null, y: null };
-  window.addEventListener('mousemove', e => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  });
-
-  // 魔法按钮
   function startMagic() {
-    for (let i = 0; i < 20; i++) {
-      setTimeout(createFalling, i * 120);
+    for (let i = 0; i < 36; i++) {
+      setTimeout(()=>createFalling(), i * 75);
     }
   }
+
+  // 滚动标题渐隐
+  window.addEventListener('scroll',()=>{
+    const sc = window.scrollY;
+    const title = document.querySelector('.glow-title');
+    const sub = document.querySelector('.hero-sub');
+    const opacity = Math.max(0, 1 - sc / 320);
+    title.style.opacity = opacity;
+    sub.style.opacity = opacity;
+  })
 </script>
 
 </body>

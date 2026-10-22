@@ -189,121 +189,41 @@
   .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 32px;
+    gap: 24px;
   }
 
-  .card {
-    perspective: 1300px;
-    height: 350px;
-    cursor: pointer;
-  }
-  .card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: 24px;
-    transform-style: preserve-3d;
-    transition: transform 0.95s cubic-bezier(0.2, 0.85, 0.2, 1);
-    box-shadow: 0 16px 38px rgba(255, 130, 180, 0.32);
-  }
-  .card-inner.flip{
-    transform: rotateY(180deg);
-  }
-
-  .card-face {
-    position: absolute;
-    inset: 0;
-    border-radius: 24px;
-    backface-visibility: hidden;
-    overflow: hidden;
-  }
-
-  .card-front {
+  .photo-item {
     background: #fff;
-    padding: 13px;
+    padding: 12px;
+    border-radius: 20px;
     border: 3px solid transparent;
     background-image: linear-gradient(#fff, #fff), linear-gradient(135deg, #ffb8d1, #ffdf9e, #9de0ff, #c7b0ff);
     background-origin: border-box;
     background-clip: padding-box, border-box;
-    position:relative;
-    transition: transform 0.3s ease;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 12px 30px rgba(255, 130, 180, 0.25);
   }
-  .card:hover .card-front{
+  .photo-item:hover{
     transform: translateY(-6px);
   }
-  .card-front::after{
-    content:"";
-    position:absolute;
-    inset:-3px;
-    background: linear-gradient(135deg, #ffb8d1, #ffdf9e, #9de0ff, #c7b0ff,#ffb8d1);
-    background-size:400% 400%;
-    border-radius:24px;
-    z-index:-1;
-    opacity:0;
-    transition:0.45s;
-  }
-  .card:hover .card-front::after{
-    opacity:1;
-    animation:borderFlow 3.2s linear infinite;
-  }
-  @keyframes borderFlow{
-    0%{background-position:0% 50%;}
-    100%{background-position:400% 50%;}
-  }
-
-  .card-front img {
+  .photo-item img {
     width: 100%;
-    height: 250px;
+    height: 300px;
     object-fit: cover;
-    border-radius: 16px;
-    transition: transform 0.65s ease;
+    border-radius:14px;
+    transition: transform 0.5s ease;
   }
-  .card:hover .card-front img {
-    transform: scale(1.09);
+  .photo-item:hover img {
+    transform: scale(1.04);
   }
-
-  .card-label {
-    margin-top: 11px;
+  .photo-label {
+    margin-top: 10px;
     text-align: center;
     font-weight: bold;
     color: #804864;
     letter-spacing: 2px;
     font-size:15px;
-  }
-
-  .card-back {
-    transform: rotateY(180deg);
-    background: linear-gradient(135deg, #ffcfe6, #e1f4ff, #e4ffe9);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 26px;
-    text-align: center;
-    border: 3px solid #fff;
-  }
-
-  .card-back h3 {
-    font-size: 26px;
-    color: #603675;
-    margin-bottom: 14px;
-  }
-
-  .card-back p {
-    font-size: 15px;
-    color: #50405c;
-    line-height: 1.9;
-  }
-
-  .card-back .sparkle {
-    font-size: 32px;
-    margin-top: 12px;
-    animation: sparkle 1.5s infinite;
-  }
-
-  @keyframes sparkle {
-    0%, 100% { transform: scale(1) rotate(0); opacity: 1; }
-    50% { transform: scale(1.35) rotate(10deg); opacity: 0.72; }
   }
 
   .footer {
@@ -416,7 +336,7 @@
   @media (max-width: 600px) {
     .glow-title { font-size: 38px; letter-spacing: 4px; }
     .hero-sub { font-size: 17px; }
-    .card { height: 330px; }
+    .photo-item img { height:240px; }
     .music-btn{width:46px;height:46px;font-size:20px;}
     .prev-btn,.next-btn{display:none;}
   }
@@ -425,7 +345,6 @@
 <body>
 <audio id="bgMusic" loop preload="auto">
   <source src="https://music.163.com/song/media/outer/url?id=2027064411.mp3" type="audio/mpeg">
-
 
 
 <button class="music-btn" id="musicBtn">🎵</button>
@@ -439,64 +358,28 @@
     <h1 class="glow-title" id="titleClick">何彦秀</h1>
     <div class="hero-sub">时光温柔，慢慢长大</div>
     <div class="deco-line"></div>
-    <div class="tip-bar">✨ 单击看大图｜方向键切换图片｜双击翻转卡片｜右上角音符开启音乐 ✨</div>
+    <div class="tip-bar">✨ 单击图片放大｜方向键切换图片｜右上角音符开启音乐 ✨</div>
   </section>
 
   <!-- ========== 17岁 ========== -->
   <section class="age-section fade-item">
     <h2 class="age-title">📌 17岁 · 青涩花期</h2>
     <div class="gallery">
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <img src="a1.jpg" alt="17岁">
-            <div class="card-label">17岁</div>
-          </div>
-          <div class="card-face card-back">
-            <h3>17岁</h3>
-            <p>风很轻，阳光很软，是闪闪发光的少年时代。</p>
-            <div class="sparkle">✨</div>
-          </div>
-        </div>
+      <div class="photo-item">
+        <img src="a1.jpg" alt="17岁">
+        <div class="photo-label">17岁</div>
       </div>
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <img src="a2.jpg" alt="17岁">
-            <div class="card-label">17岁</div>
-          </div>
-          <div class="card-face card-back">
-            <h3>17岁</h3>
-            <p>满怀期待，向着心里想去的方向出发。</p>
-            <div class="sparkle">💫</div>
-          </div>
-        </div>
+      <div class="photo-item">
+        <img src="a2.jpg" alt="17岁">
+        <div class="photo-label">17岁</div>
       </div>
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <img src="a3.jpg" alt="17岁">
-            <div class="card-label">17岁</div>
-          </div>
-          <div class="card-face card-back">
-            <h3>17岁</h3>
-            <p>所有细碎美好的瞬间，都值得好好珍藏。</p>
-            <div class="sparkle">🌸</div>
-          </div>
-        </div>
+      <div class="photo-item">
+        <img src="a3.jpg" alt="17岁">
+        <div class="photo-label">17岁</div>
       </div>
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <img src="a4.jpg" alt="17岁">
-            <div class="card-label">17岁</div>
-          </div>
-          <div class="card-face card-back">
-            <h3>17岁</h3>
-            <p>不慌不忙，慢慢长成自己喜欢的模样。</p>
-            <div class="sparkle">🌷</div>
-          </div>
-        </div>
+      <div class="photo-item">
+        <img src="a4.jpg" alt="17岁">
+        <div class="photo-label">17岁</div>
       </div>
     </div>
   </section>
@@ -505,44 +388,17 @@
   <section class="age-section fade-item">
     <h2 class="age-title">📌 19岁 · 奔赴热爱</h2>
     <div class="gallery">
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <img src="c1.jpg" alt="19岁">
-            <div class="card-label">19岁</div>
-          </div>
-          <div class="card-face card-back">
-            <h3>19岁</h3>
-            <p>遇见喜欢的专业，一点点找到属于自己的热爱。</p>
-            <div class="sparkle">🌟</div>
-          </div>
-        </div>
+      <div class="photo-item">
+        <img src="c1.jpg" alt="19岁">
+        <div class="photo-label">19岁</div>
       </div>
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <img src="c2.jpg" alt="19岁">
-            <div class="card-label">19岁</div>
-          </div>
-          <div class="card-face card-back">
-            <h3>19岁</h3>
-            <p>在学习里沉淀，慢慢积攒底气与力量。</p>
-            <div class="sparkle">☁️</div>
-          </div>
-        </div>
+      <div class="photo-item">
+        <img src="c2.jpg" alt="19岁">
+        <div class="photo-label">19岁</div>
       </div>
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <img src="c5.jpg" alt="19岁">
-            <div class="card-label">19岁</div>
-          </div>
-          <div class="card-face card-back">
-            <h3>19岁</h3>
-            <p>保持温柔，也拥有独当一面的勇气。</p>
-            <div class="sparkle">🎐</div>
-          </div>
-        </div>
+      <div class="photo-item">
+        <img src="c5.jpg" alt="19岁">
+        <div class="photo-label">19岁</div>
       </div>
     </div>
   </section>
@@ -551,57 +407,21 @@
   <section class="age-section fade-item">
     <h2 class="age-title">📌 20岁 · 稳步生长</h2>
     <div class="gallery">
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <img src="d1.jpg" alt="20岁">
-            <div class="card-label">20岁</div>
-          </div>
-          <div class="card-face card-back">
-            <h3>20岁</h3>
-            <p>和过去告别，奔赴更明亮的前路。</p>
-            <div class="sparkle">💖</div>
-          </div>
-        </div>
+      <div class="photo-item">
+        <img src="d1.jpg" alt="20岁">
+        <div class="photo-label">20岁</div>
       </div>
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <img src="d2.jpg" alt="20岁">
-            <div class="card-label">20岁</div>
-          </div>
-          <div class="card-face card-back">
-            <h3>20岁</h3>
-            <p>不停练习，让热爱慢慢开出花来。</p>
-            <div class="sparkle">🌈</div>
-          </div>
-        </div>
+      <div class="photo-item">
+        <img src="d2.jpg" alt="20岁">
+        <div class="photo-label">20岁</div>
       </div>
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <img src="d4.jpg" alt="20岁">
-            <div class="card-label">20岁</div>
-          </div>
-          <div class="card-face card-back">
-            <h3>20岁</h3>
-            <p>接纳所有，继续闪闪发光。</p>
-            <div class="sparkle">✨</div>
-          </div>
-        </div>
+      <div class="photo-item">
+        <img src="d4.jpg" alt="20岁">
+        <div class="photo-label">20岁</div>
       </div>
-      <div class="card">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <img src="d6.jpg" alt="20岁">
-            <div class="card-label">20岁</div>
-          </div>
-          <div class="card-face card-back">
-            <h3>20岁</h3>
-            <p>愿永远自在，热烈且自由。</p>
-            <div class="sparkle">🌙</div>
-          </div>
-        </div>
+      <div class="photo-item">
+        <img src="d6.jpg" alt="20岁">
+        <div class="photo-label">20岁</div>
       </div>
     </div>
   </section>
@@ -643,35 +463,22 @@
   }
 
   // 收集所有图片，用于预览切换
-  const allImgs = Array.from(document.querySelectorAll('.card-front img'));
+  const allImgs = Array.from(document.querySelectorAll('.photo-item img'));
   let currentIndex = 0;
 
-  const cards = document.querySelectorAll('.card');
+  const photoItems = document.querySelectorAll('.photo-item');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const closePreview = document.getElementById('closePreview');
   const prevImgBtn = document.getElementById('prevImg');
   const nextImgBtn = document.getElementById('nextImg');
 
-  // 卡片点击逻辑：单击大图，双击翻转
-  cards.forEach((card,idx) => {
-    let timer = null;
-    let isDouble = false;
-    card.addEventListener('click', (e) => {
-      timer = setTimeout(()=>{
-        if(!isDouble){
-          currentIndex = idx;
-          lightboxImg.src = allImgs[idx].src;
-          lightbox.classList.add('active');
-          burst(e.clientX, e.clientY);
-        }
-        isDouble = false;
-      },250)
-    })
-    card.addEventListener('dblclick',(e)=>{
-      clearTimeout(timer);
-      isDouble = true;
-      card.querySelector('.card-inner').classList.toggle('flip');
+  // 图片单击放大
+  photoItems.forEach((item,idx) => {
+    item.addEventListener('click', (e) => {
+      currentIndex = idx;
+      lightboxImg.src = allImgs[idx].src;
+      lightbox.classList.add('active');
       burst(e.clientX, e.clientY);
     })
   });
